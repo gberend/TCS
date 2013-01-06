@@ -4,12 +4,16 @@
  */
 package com.tums.view;
 
+import com.tums.utils.DateUtils;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-/**
- *
- * @author john
- */
 public class MainWindow extends javax.swing.JFrame {
 
     /**
@@ -17,6 +21,7 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
+        initInternals();
     }
 
     /**
@@ -34,6 +39,7 @@ public class MainWindow extends javax.swing.JFrame {
         pauseBtn = new javax.swing.JButton();
         stopBtn = new javax.swing.JButton();
         totalForwBtn = new javax.swing.JButton();
+        timeLbl = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -100,6 +106,9 @@ public class MainWindow extends javax.swing.JFrame {
         totalForwBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         totalForwBtn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(totalForwBtn);
+
+        timeLbl.setText("--:--:--");
+        jToolBar1.add(timeLbl);
 
         fileMenu.setMnemonic('f');
         fileMenu.setText("File");
@@ -179,7 +188,7 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 311, Short.MAX_VALUE))
+                .addGap(0, 317, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,7 +211,7 @@ public class MainWindow extends javax.swing.JFrame {
         pauseBtn.setEnabled(false);
         stopBtn.setEnabled(false);
         totalBackBtn.setEnabled(true);
-        totalForwBtn.setEnabled(true);        
+        totalForwBtn.setEnabled(true);
     }//GEN-LAST:event_stopBtnActionPerformed
 
     private void pauseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseBtnActionPerformed
@@ -215,9 +224,30 @@ public class MainWindow extends javax.swing.JFrame {
 
     private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutMenuItemActionPerformed
         JOptionPane.showMessageDialog(this,
-                String.format("TuMS v.0.0.1 alpha %n %n Copyright (C) 2013 by gberend"), 
+                String.format("TuMS v.0.0.1 alpha %n %n Copyright (C) 2013 by gberend"),
                 "About...", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_aboutMenuItemActionPerformed
+
+    private void initInternals() {
+        final int periodSecs = 1;
+        TimerTask task = new TimerTask() {
+            private final DateFormat fmt = new SimpleDateFormat("HH:mm:ss");
+            private Date date = DateUtils.getDate(0,0,0,0,0,0);
+
+            @Override
+            public void run() {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        date = DateUtils.addSeconds(date, periodSecs);
+                        timeLbl.setText(fmt.format(date));
+                    }
+                });
+            }
+        };
+        Timer timer = new Timer(true);
+        timer.schedule(task, 1000, periodSecs * 1000);
+    }
 
     /**
      * @param args the command line arguments
@@ -272,6 +302,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton stopBtn;
+    private javax.swing.JLabel timeLbl;
     private javax.swing.JButton totalBackBtn;
     private javax.swing.JButton totalForwBtn;
     // End of variables declaration//GEN-END:variables

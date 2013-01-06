@@ -3,3 +3,6 @@
 # Package Files #
 *.war
 *.ear
+/TuMS/nbproject/private/
+/TuMS/build/
+/TuMS/dist/
