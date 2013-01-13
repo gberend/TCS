@@ -5,6 +5,8 @@
 package com.tums.view;
 
 import com.tums.utils.DateUtils;
+import com.yetra.turing.api.IMachine;
+import com.yetra.turing.impl.Machine;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -247,6 +249,12 @@ public class MainWindow extends javax.swing.JFrame {
         };
         Timer timer = new Timer(true);
         timer.schedule(task, 1000, periodSecs * 1000);
+        // Test
+        String[] Q = new String[] { "q0", "q1", "q2", "qe" };
+        char[] Σ = new char[] { '|' };
+        char[] Γ = new char[] { '|', '0', '1', '⊔' };
+        IMachine machine = new Machine(Q, Σ, Γ, "q0", '⊔');
+        System.out.println(machine);
     }
 
     /**
